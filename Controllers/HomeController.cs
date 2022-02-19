@@ -1,4 +1,5 @@
-﻿using ASPChushka.Models;
+﻿using ASPChushka.Data;
+using ASPChushka.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
@@ -11,15 +12,21 @@ namespace ASPChushka.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
+        private ChushkaContext context;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ChushkaContext context)
         {
-            _logger = logger;
+            this.context = context;
         }
 
         public IActionResult Index()
         {
+            context.Users.Add(new User() { 
+                FullName = "Dsad",
+                Username = "Dadada",
+                Password = "dsf"
+            });
+            context.SaveChanges();
             return View();
         }
 
