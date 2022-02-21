@@ -1,6 +1,7 @@
 ﻿
 
 using Microsoft.EntityFrameworkCore;
+using ASPChushka.Models;
 
 namespace ASPChushka.Data
 {
@@ -23,19 +24,23 @@ namespace ASPChushka.Data
         public virtual DbSet<Order> Orders { get; set; }
 
 
-        // Relationships
-        //protected override void OnModelCreating(ModelBuilder modelBuilder)
-        //{
-        //    modelBuilder.Entity<Order>()
-        //        .HasOne(o => o.User)
-        //        .WithMany(u => u.Orders)
-        //        .HasForeignKey(o => o.UserId);
+        //Relationships
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Order>()
+                .HasOne(o => o.User)
+                .WithMany(u => u.Orders)
+                .HasForeignKey(o => o.UserId);
 
-        //    modelBuilder.Entity<Order>()
-        //        .HasOne(p => p.Product)
-        //        .WithMany(p => p.Orders)
-        //        .HasForeignKey(o => o.ProductId);
-        //}
+            modelBuilder.Entity<Order>()
+                .HasOne(p => p.Product)
+                .WithMany(p => p.Orders)
+                .HasForeignKey(o => o.ProductId);
+        }
+
+
+        //Relationships
+        public DbSet<ASPChushka.Models.UsersVM> UsersVM { get; set; }
         // Connection String
         //protected override void OnConfiguring(DbContextOptionsBuilder optionBuilder)
         //{

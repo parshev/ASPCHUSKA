@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace ASPChushka.Data
 {
-    public enum RoleType { User, Admin }
     public class User
     {
+        [Key]
         public int Id { get; set; }
 
         public string Username { get; set; }
@@ -18,7 +19,7 @@ namespace ASPChushka.Data
 
         public string Email { get; set; }
 
-        public RoleType Role { get; set; }
+        public Roles Role { get; set; }
 
         public ICollection<Order> Orders { get; set; }
 

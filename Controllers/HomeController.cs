@@ -12,7 +12,7 @@ namespace ASPChushka.Controllers
 {
     public class HomeController : Controller
     {
-        private ChushkaContext context;
+        private readonly ChushkaContext context;
 
         public HomeController(ChushkaContext context)
         {
@@ -21,12 +21,6 @@ namespace ASPChushka.Controllers
 
         public IActionResult Index()
         {
-            context.Users.Add(new User() { 
-                FullName = "Dsad",
-                Username = "Dadada",
-                Password = "dsf"
-            });
-            context.SaveChanges();
             return View();
         }
 
