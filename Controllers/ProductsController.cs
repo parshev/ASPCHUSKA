@@ -105,20 +105,20 @@ namespace ASPChushka.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Name,Price,Description,Type")] ProductsVM product)
         {
-            //2. Намирам записа в БД
+            //1. Намирам записа в БД
             Product modelToDB = await _context.Products.FindAsync(id);
             if (modelToDB == null)
             {
                 return NotFound();
             }
-            //3. Прехвърлям всичко в модела за БД .... готвим се за запис в БД
+            //2. Прехвърлям всичко в модела за БД .... готвим се за запис в БД
            // modelToDB.Id = product.Id;
             modelToDB.Name = product.Name;
             modelToDB.Price = product.Price;
             modelToDB.Description = product.Description;
             modelToDB.Type = product.Type;
 
-            //4. ЗАПИС в БД
+            //3. ЗАПИС в БД
             if (ModelState.IsValid)
             {
                 try
@@ -137,8 +137,10 @@ namespace ASPChushka.Controllers
                         throw;
                     }
                 }
+                //4. Извикваме Details на актуализирания запис
                 return RedirectToAction("Details", new { id = id });
             }
+            //презареждаме страницата
             return View(modelToDB);
         }
 

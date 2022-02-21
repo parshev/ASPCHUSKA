@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using ASPChushka.Data;
+using ASPChushka.Models;
 
 namespace ASPChushka.Controllers
 {
@@ -48,9 +49,34 @@ namespace ASPChushka.Controllers
         // GET: Orders/Create
         public IActionResult Create()
         {
-            ViewData["ProductId"] = new SelectList(_context.Products, "Id", "Id");
-            ViewData["UserId"] = new SelectList(_context.Users, "Id", "Id");
+            //ListProducts itemsProd = new SelectListItem(
+
+            //    );
+            //ViewData["ProductId"] = new SelectList(_context.Products, "Id", "Id");
+            //ViewData["UserId"] = new SelectList(_context.Users, "Id", "Id");
             return View();
+        }
+        //с иточване на свързаните данни от таблици Products ,  Users
+        // GET: Orders/Create
+        public IActionResult Create1()
+        {
+            OrdersVM model = new OrdersVM();
+            model.Products=_context.Products.Select(pr=> new SelectListItem
+            {
+                Value = pr.Id.ToString(),
+                Text = pr.Name,
+                Selected = pr.Id == model.ProductId
+            }).ToList();
+            model.Users=_context.Users.Select(user=>new SelectListItem
+            {
+                Value = user.Id.ToString(),
+                Text = user.FullName,
+                Selected = user.Id == model.UserId
+            }).ToList();
+
+            //ViewData["ProductId"] = new SelectList(_context.Products, "Id", "Id");
+            //ViewData["UserId"] = new SelectList(_context.Users, "Id", "Id");
+            return View(model);
         }
 
         // POST: Orders/Create
@@ -66,6 +92,7 @@ namespace ASPChushka.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+
             ViewData["ProductId"] = new SelectList(_context.Products, "Id", "Id", order.ProductId);
             ViewData["UserId"] = new SelectList(_context.Users, "Id", "Id", order.UserId);
             return View(order);

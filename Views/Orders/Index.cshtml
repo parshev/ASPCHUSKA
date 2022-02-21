@@ -12,10 +12,10 @@
 <table class="table">
     <thead>
         <tr>
-            <th>
+            <th colspan="2">
                 @Html.DisplayNameFor(model => model.Product)
             </th>
-            <th>
+            <th colspan="2">
                 @Html.DisplayNameFor(model => model.User)
             </th>
             <th>
@@ -31,7 +31,13 @@
                 @Html.DisplayFor(modelItem => item.Product.Id)
             </td>
             <td>
+                @Html.DisplayFor(modelItem => item.Product.Name)
+            </td>
+            <td>
                 @Html.DisplayFor(modelItem => item.User.Id)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.User.FullName)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.OrderedOn)
