@@ -24,6 +24,10 @@ namespace ASPChushka.Controllers
         {
             List<Product> productsList = await _context.Products.ToListAsync();
             return View(productsList);
+            //return View(productsList)ListProducts model = new ListProducts();
+            //model.Items = await _context.Products.ToListAsync();
+            //return View(model);
+
         }
 
         // GET: Products/Details/5
@@ -34,7 +38,8 @@ namespace ASPChushka.Controllers
                 return NotFound();
             }
 
-            var product = await _context.Products.FirstOrDefaultAsync(m => m.Id == id);
+            var product = await _context.Products
+                .FirstOrDefaultAsync(m => m.Id == id);
             if (product == null)
             {
                 return NotFound();
@@ -79,13 +84,14 @@ namespace ASPChushka.Controllers
             {
                 return NotFound();
             }
-
+            //1. зареждам искания id от БД .... за промяна на стойностите
             var product = await _context.Products.FindAsync(id);
             if (product == null)
             {
                 return NotFound();
             }
-
+            //2. Създавм модела, с който ще визуализирам за промяна на стойностите
+            //3. Пълня от БД в полетата на екрана
             ProductsVM model = new ProductsVM
             {
                 Id = product.Id,
@@ -111,38 +117,40 @@ namespace ASPChushka.Controllers
             {
                 return NotFound();
             }
+            if (!ModelState.IsValid)
+            {
+                //презареждаме страницата
+                return View(modelToDB);
+            }
             //2. Прехвърлям всичко в модела за БД .... готвим се за запис в БД
-           // modelToDB.Id = product.Id;
+            //modelToDB.Id = product.Id;// не се пипа при промяна
             modelToDB.Name = product.Name;
             modelToDB.Price = product.Price;
             modelToDB.Description = product.Description;
             modelToDB.Type = product.Type;
 
+
             //3. ЗАПИС в БД
-            if (ModelState.IsValid)
+            try
             {
-                try
-                {
-                    _context.Update(modelToDB);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!ProductExists(modelToDB.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                //4. Извикваме Details на актуализирания запис
-                return RedirectToAction("Details", new { id = id });
+                _context.Update(modelToDB);
+                await _context.SaveChangesAsync();
             }
-            //презареждаме страницата
-            return View(modelToDB);
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!ProductExists(modelToDB.Id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+            //4. Извикваме Details на актуализирания запис
+            return RedirectToAction("Details", new { id = id });
         }
+
 
         // GET: Products/Delete/5
         public async Task<IActionResult> Delete(int? id)
@@ -179,3 +187,6 @@ namespace ASPChushka.Controllers
         }
     }
 }
+
+
+

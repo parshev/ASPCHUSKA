@@ -10,11 +10,11 @@ using ASPChushka.Models;
 
 namespace ASPChushka.Controllers
 {
-    public class OrdersController : Controller
+    public class Orders111Controller : Controller
     {
         private readonly ChushkaContext _context;
 
-        public OrdersController(ChushkaContext context)
+        public Orders111Controller(ChushkaContext context)
         {
             _context = context;
         }
@@ -48,18 +48,26 @@ namespace ASPChushka.Controllers
             return View(order);
         }
 
-        //с иточване на свързаните данни от таблици Products ,  Users
         // GET: Orders/Create
         public IActionResult Create()
         {
+            
+            //ViewData["ProductId"] = new SelectList(_context.Products, "Id", "Id");
+            //ViewData["UserId"] = new SelectList(_context.Users, "Id", "Id");
+            return View();
+        }
+        //с иточване на свързаните данни от таблици Products ,  Users
+        // GET: Orders/Create
+        public IActionResult Create1()
+        {
             OrdersVM model = new OrdersVM();
-            model.Products = _context.Products.Select(pr => new SelectListItem
+            model.Products=_context.Products.Select(pr=> new SelectListItem
             {
                 Value = pr.Id.ToString(),
                 Text = pr.Name,
                 Selected = pr.Id == model.ProductId
             }).ToList();
-            model.Users = _context.Users.Select(user => new SelectListItem
+            model.Users=_context.Users.Select(user=>new SelectListItem
             {
                 Value = user.Id.ToString(),
                 Text = user.FullName,
@@ -76,7 +84,7 @@ namespace ASPChushka.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(int? id, [Bind("ProductId,UserId,OrderedOn")] Order order)
+        public async Task<IActionResult> Create(int? id,[Bind("ProductId,UserId,OrderedOn")] Order order)
         {
             if (ModelState.IsValid)
             {
@@ -110,40 +118,15 @@ namespace ASPChushka.Controllers
             {
                 return NotFound();
             }
-            //1. зареждам искания запис от БД
+
             var order = await _context.Orders.FindAsync(id);
             if (order == null)
             {
                 return NotFound();
             }
-            //2. Създавм модела, с който ще визуализирам за промяна на стойностите
-            //3. Пълня от БД в полетата на екрана
-            OrdersVM model = new OrdersVM();
-            model.Id = order.Id;
-            model.ProductId = order.ProductId;
-            model.OrderedOn = order.OrderedOn;
-            model.UserId = order.UserId;
-            // >>> зареждаме падащ списък с всички продукти от БД
-            model.Products = _context.Products.Select(pr => new SelectListItem
-            {
-                Value = pr.Id.ToString(),
-                Text = pr.Name,
-                Selected = pr.Id == model.ProductId
-            }).ToList();
-            // >>> зареждаме падащ списък с всички потребители от БД
-            model.Users = _context.Users.Select(user => new SelectListItem
-            {
-                Value = user.Id.ToString(),
-                Text = user.FullName,
-                Selected = user.Id == model.UserId
-            }).ToList();
-            //4. стартирам изгледа с напълнения модел
-            return View(model);
-
-
-            //ViewData["ProductId"] = new SelectList(_context.Products, "Id", "Name", order.ProductId);
-            //ViewData["UserId"] = new SelectList(_context.Users, "Id", "FullName", order.UserId);
-            //return View(order);
+            ViewData["ProductId"] = new SelectList(_context.Products, "Id", "Name", order.ProductId);
+            ViewData["UserId"] = new SelectList(_context.Users, "Id", "FullName", order.UserId);
+            return View(order);
         }
 
         // POST: Orders/Edit/5
@@ -151,58 +134,36 @@ namespace ASPChushka.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,ProductId,UserId,OrderedOn")] OrdersVM order)
+        public async Task<IActionResult> Edit(int id, [Bind("ProductId,UserId,OrderedOn")] Order order)
         {
             if (id != order.Id)
             {
                 return NotFound();
             }
-            //1. Намирам записа в БД >>> с модела от Data
-            Order modelToDB = await _context.Orders.FindAsync(id);
-            if (modelToDB == null)
-            {
-                return NotFound();
-            }
-           
-            if (!ModelState.IsValid) //ако моделът не е ОК
-            {
-                //презареждаме страницата
-                return View(modelToDB);
-            }
-            //2. Прехвърлям всичко в модела за БД .... готвим се за запис в БД
-            modelToDB.Id = order.Id;
-            modelToDB.ProductId = order.ProductId;
-            modelToDB.UserId = order.UserId;
-            modelToDB.OrderedOn = order.OrderedOn;
-            //modelToDB.Product =await _context.Products.FindAsync(order.ProductId);
-            //modelToDB.User = await _context.Users.FindAsync(order.UserId);
 
-            //3. ЗАПИС в БД          
-            try
+            if (ModelState.IsValid)
             {
-                _context.Update(modelToDB);   //  a NE  (order);
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!OrderExists(modelToDB.Id))
+                try
                 {
-                    return NotFound();
+                    _context.Update(order);
+                    await _context.SaveChangesAsync();
                 }
-                else
+                catch (DbUpdateConcurrencyException)
                 {
-                    throw;
+                    if (!OrderExists(order.Id))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
                 }
+                return RedirectToAction(nameof(Index));
             }
-            //4. Извикваме Details на актуализирания запис
-            return RedirectToAction("Details", new { id = id });
-
-
-            //    return RedirectToAction(nameof(Index));
-            //}
-            //ViewData["ProductId"] = new SelectList(_context.Products, "Id", "Name", order.ProductId);
-            //ViewData["UserId"] = new SelectList(_context.Users, "Id", "FullName", order.UserId);
-            //return View(order);
+            ViewData["ProductId"] = new SelectList(_context.Products, "Id", "Name", order.ProductId);
+            ViewData["UserId"] = new SelectList(_context.Users, "Id", "FullName", order.UserId);
+            return View(order);
         }
 
         // GET: Orders/Delete/5

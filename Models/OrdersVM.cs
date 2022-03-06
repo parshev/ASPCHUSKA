@@ -14,12 +14,12 @@ namespace ASPChushka.Models
 
         public int ProductId { get; set; }
 
-        [Required(ErrorMessage = "This field is required")]
+       // [Required(ErrorMessage = "This field is required")]
         public List<SelectListItem> Products { get; set; }
 
         public int UserId { get; set; }
 
-        [Required(ErrorMessage = "This field is required")]
+       // [Required(ErrorMessage = "This field is required")]
         public List<SelectListItem> Users { get; set; }
        
         [Required(ErrorMessage = "This field is required")]

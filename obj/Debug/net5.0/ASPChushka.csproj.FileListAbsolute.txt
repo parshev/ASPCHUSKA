@@ -148,7 +148,6 @@ C:\Users\tbele\source\repos\ASPChushka\obj\Debug\net5.0\Razor\Views\Users\Detail
 C:\Users\tbele\source\repos\ASPChushka\obj\Debug\net5.0\Razor\Views\Users\Edit.cshtml.g.cs
 C:\Users\tbele\source\repos\ASPChushka\obj\Debug\net5.0\Razor\Views\Users\Index.cshtml.g.cs
 C:\Users\tbele\source\repos\ASPChushka\obj\Debug\net5.0\Razor\Views\Users\Create.cshtml.g.cs
-C:\Users\tbele\source\repos\ASPChushka\obj\Debug\net5.0\ASPChushka.csproj.AssemblyReference.cache
 C:\Users\tbele\source\repos\ASPChushka\obj\Debug\net5.0\Razor\Views\Products\Create.cshtml.g.cs
 C:\Users\tbele\source\repos\ASPChushka\obj\Debug\net5.0\Razor\Views\Products\Delete.cshtml.g.cs
 C:\Users\tbele\source\repos\ASPChushka\obj\Debug\net5.0\Razor\Views\Products\Details.cshtml.g.cs
@@ -159,5 +158,5 @@ C:\Users\tbele\source\repos\ASPChushka\obj\Debug\net5.0\Razor\Views\Orders\Delet
 C:\Users\tbele\source\repos\ASPChushka\obj\Debug\net5.0\Razor\Views\Orders\Details.cshtml.g.cs
 C:\Users\tbele\source\repos\ASPChushka\obj\Debug\net5.0\Razor\Views\Orders\Edit.cshtml.g.cs
 C:\Users\tbele\source\repos\ASPChushka\obj\Debug\net5.0\Razor\Views\Orders\Index.cshtml.g.cs
-C:\Users\tbele\source\repos\ASPChushka\obj\Debug\net5.0\Razor\Views\Orders\Create1.cshtml.g.cs
-C:\Users\tbele\source\repos\ASPChushka\obj\Debug\net5.0\Razor\Views\Orders\Edit1.cshtml.g.cs
+C:\Users\tbele\source\repos\ASPChushka\obj\Debug\net5.0\Razor\Views\Orders\Edit111.cshtml.g.cs
+C:\Users\tbele\source\repos\ASPChushka\obj\Debug\net5.0\ASPChushka.csproj.AssemblyReference.cache

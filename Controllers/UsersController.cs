@@ -64,7 +64,7 @@ namespace ASPChushka.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(int id,[Bind("Username,Password,FullName,Email,Role")] User user)
+        public async Task<IActionResult> Create(int id, [Bind("Username,Password,FullName,Email,Role")] User user)
         {
             if (ModelState.IsValid)
             {
@@ -109,35 +109,38 @@ namespace ASPChushka.Controllers
         {
             if (ModelState.IsValid)
             {
-                try
-                {
-                    User userInDatabase = await _context.Users.FindAsync(id);
-                    if (userInDatabase == null)
-                    {
-                        return NotFound();
-                    }
-                    userInDatabase.Username = user.Username;
-                    userInDatabase.Password = user.Password;
-                    userInDatabase.FullName = user.FullName;
-                    userInDatabase.Email = user.Email;
-                    userInDatabase.Role = user.Role;
-                    _context.Update(userInDatabase);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!UserExists(user.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction("Details", new { id = id });
+                return View(user);
             }
-            return View(user);
+            User userInDatabase = await _context.Users.FindAsync(id);
+            if (userInDatabase == null)
+            {
+                return NotFound();
+            }
+            userInDatabase.Username = user.Username;
+            userInDatabase.Password = user.Password;
+            userInDatabase.FullName = user.FullName;
+            userInDatabase.Email = user.Email;
+            userInDatabase.Role = user.Role;
+            try
+            {
+
+                _context.Update(userInDatabase);
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!UserExists(user.Id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+            return RedirectToAction("Details", new { id = id });
+
+
         }
 
         // GET: Users/Delete/5
